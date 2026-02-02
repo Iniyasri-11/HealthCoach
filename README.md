@@ -1,16 +1,32 @@
-# Personal Health Coach
+Personal Health Coach
+Description
 
-## Description
-Personal Health Coach is a health monitoring agent that compresses medical history and wellness data to provide personalized health recommendations efficiently.
+Personal Health Coach is an intelligent health monitoring application designed to efficiently manage and analyze medical history and wellness data. By compressing and organizing health information, it delivers personalized health recommendations while minimizing processing overhead, helping users make informed decisions about their well-being.
 
-## Features
-- Medical data compression
-- Wellness monitoring
-- Personalized health recommendations
-- Low processing cost
+Features
 
-## Usage
-Run the application and input health data to receive insights.
+Medical Data Compression – Efficiently stores and manages large volumes of health records.
 
-## License
-MIT License
+Wellness Monitoring – Tracks vital signs, activity levels, and lifestyle habits.
+
+Personalized Health Recommendations – Provides actionable advice based on user health profiles.
+
+Low Processing Cost – Optimized algorithms for minimal computational resources.
+
+Technology Stack
+
+Programming Language: Python / JavaScript / Java (depending on implementation)
+
+Database: SQLite / MongoDB / MySQL
+
+Frontend: React / Angular / HTML-CSS (if web-based)
+
+Libraries & Tools: Pandas, NumPy, TensorFlow (optional for predictive analytics), Chart.js for visualization
+
+Prerequisites
+
+Installed Python 3.x or Node.js (depending on the implementation)
+
+Package manager (pip / npm)
+
+Basic knowledge of health metrics and data handling
