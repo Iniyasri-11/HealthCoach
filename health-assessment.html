@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessment - WellnessFlow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, rgba(168, 232, 211, 0.3), rgba(168, 216, 232, 0.2));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .assessment-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #6ec7a5;
+        }
+
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6ec7a5;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .assessment-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.12);
+            border: 1px solid rgba(110, 199, 165, 0.1);
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(110, 199, 165, 0.1);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6ec7a5, #a8e6d3);
+            transition: width 0.3s ease;
+        }
+
+        .question-section {
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group label:hover {
+            border-color: #6ec7a5;
+            background: rgba(110, 199, 165, 0.05);
+        }
+
+        .form-group input[type="radio"],
+        .form-group input[type="checkbox"] {
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .form-group input[type="radio"]:checked + label,
+        .form-group input[type="checkbox"]:checked + label {
+            border-color: #6ec7a5;
+            background: rgba(110, 199, 165, 0.1);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6ec7a5;
+            box-shadow: 0 0 0 3px rgba(110, 199, 165, 0.1);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #6ec7a5;
+            box-shadow: 0 0 0 3px rgba(110, 199, 165, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: rgba(110, 199, 165, 0.1);
+            color: #6ec7a5;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(110, 199, 165, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6ec7a5, #a8e6d3);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            border-left: 4px solid #c33;
+        }
+
+        .success {
+            background: #efe;
+            color: #3c3;
+            border-left: 4px solid #3c3;
+        }
+
+        @media (max-width: 768px) {
+            .assessment-card {
+                padding: 2rem;
+            }
+
+            .question-title {
+                font-size: 1.1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="assessment-container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <span>WellnessFlow</span>
+            </div>
+            <h1>Let's Understand Your Health</h1>
+            <p>Answer a few questions so we can provide personalized recommendations</p>
+        </div>
+
+        <div class="assessment-card">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <form id="assessmentForm">
+                <!-- Question 1: Current Health Status -->
+                <div class="question-section active" id="q1">
+                    <div class="question-title">How are you feeling currently?</div>
+                    <div class="form-group">
+                        <input type="radio" id="health1" name="current_health" value="excellent" required>
+                        <label for="health1"><i class="fas fa-smile" style="color: #6ec7a5; margin-right: 0.5rem;"></i> Excellent - I feel great</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="health2" name="current_health" value="good" required>
+                        <label for="health2"><i class="fas fa-thumbs-up" style="color: #a8d8e8; margin-right: 0.5rem;"></i> Good - Mostly healthy</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="health3" name="current_health" value="fair" required>
+                        <label for="health3"><i class="fas fa-meh" style="color: #f39c8f; margin-right: 0.5rem;"></i> Fair - Some concerns</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="health4" name="current_health" value="poor" required>
+                        <label for="health4"><i class="fas fa-frown" style="color: #e74c3c; margin-right: 0.5rem;"></i> Poor - Many concerns</label>
+                    </div>
+                </div>
+
+                <!-- Question 2: Current Symptoms -->
+                <div class="question-section" id="q2">
+                    <div class="question-title">Are you experiencing any symptoms?</div>
+                    <textarea id="symptoms" name="symptoms" placeholder="Describe any symptoms you're experiencing (e.g., headache, fatigue, stomach pain)..." rows="4"></textarea>
+                    <small style="color: #7f8c8d;">Leave blank if no symptoms</small>
+                </div>
+
+                <!-- Question 3: Lifestyle -->
+                <div class="question-section" id="q3">
+                    <div class="question-title">How would you describe your lifestyle?</div>
+                    <div class="form-group">
+                        <input type="radio" id="lifestyle1" name="lifestyle" value="active" required>
+                        <label for="lifestyle1"><i class="fas fa-running" style="color: #6ec7a5; margin-right: 0.5rem;"></i> Very Active - Exercise regularly</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="lifestyle2" name="lifestyle" value="moderate" required>
+                        <label for="lifestyle2"><i class="fas fa-walking" style="color: #a8d8e8; margin-right: 0.5rem;"></i> Moderate - Occasional exercise</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="lifestyle3" name="lifestyle" value="sedentary" required>
+                        <label for="lifestyle3"><i class="fas fa-couch" style="color: #f39c8f; margin-right: 0.5rem;"></i> Sedentary - Minimal exercise</label>
+                    </div>
+                </div>
+
+                <!-- Question 4: Sleep & Stress -->
+                <div class="question-section" id="q4">
+                    <div class="question-title">Sleep Quality & Stress Levels</div>
+                    <div class="form-group">
+                        <label>How many hours do you sleep per night?</label>
+                        <input type="number" id="sleep_hours" name="sleep_hours" min="1" max="12" placeholder="Hours">
+                    </div>
+                    <div class="form-group">
+                        <label>Stress Level (1-10)</label>
+                        <select id="stress_level" name="stress_level" required>
+                            <option value="">Select stress level</option>
+                            <option value="1">1 - Very Low</option>
+                            <option value="5">5 - Moderate</option>
+                            <option value="8">8 - High</option>
+                            <option value="10">10 - Very High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Question 5: Diet -->
+                <div class="question-section" id="q5">
+                    <div class="question-title">How would you describe your diet?</div>
+                    <div class="form-group">
+                        <input type="radio" id="diet1" name="diet" value="very_healthy" required>
+                        <label for="diet1"><i class="fas fa-leaf" style="color: #6ec7a5; margin-right: 0.5rem;"></i> Very Healthy - Balanced nutrition</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="diet2" name="diet" value="average" required>
+                        <label for="diet2"><i class="fas fa-utensils" style="color: #a8d8e8; margin-right: 0.5rem;"></i> Average - Mix of healthy and unhealthy</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" id="diet3" name="diet" value="poor" required>
+                        <label for="diet3"><i class="fas fa-hamburger" style="color: #f39c8f; margin-right: 0.5rem;"></i> Poor - Mostly processed foods</label>
+                    </div>
+                </div>
+
+                <!-- Question 6: Medical History -->
+                <div class="question-section" id="q6">
+                    <div class="question-title">Any medical conditions or allergies?</div>
+                    <textarea id="medical_history" name="medical_history" placeholder="List any chronic conditions, medications, or allergies..." rows="4"></textarea>
+                    <small style="color: #7f8c8d;">Leave blank if none</small>
+                </div>
+
+                <!-- Navigation -->
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextBtn">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 6;
+
+        // Check if user is logged in
+        function checkAuthStatus() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        checkAuthStatus();
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Show question
+        function showQuestion(questionNum) {
+            document.querySelectorAll('.question-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById('q' + questionNum).classList.add('active');
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (questionNum === 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+            } else if (questionNum === totalQuestions) {
+                prevBtn.style.display = 'block';
+                nextBtn.innerHTML = 'Complete Assessment ✓';
+            } else {
+                prevBtn.style.display = 'block';
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+            }
+
+            updateProgress();
+        }
+
+        // Navigation handlers
+        document.getElementById('nextBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Validate current question
+            const form = document.getElementById('assessmentForm');
+            const formData = new FormData(form);
+
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                // Submit assessment
+                submitAssessment(formData);
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        });
+
+        async function submitAssessment(formData) {
+            const messageContainer = document.getElementById('messageContainer');
+            const assessmentData = {
+                current_health: formData.get('current_health'),
+                symptoms: formData.get('symptoms'),
+                lifestyle: formData.get('lifestyle'),
+                sleep_hours: formData.get('sleep_hours'),
+                stress_level: formData.get('stress_level'),
+                diet: formData.get('diet'),
+                medical_history: formData.get('medical_history')
+            };
+
+            try {
+                // Get user email from localStorage
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user || !user.email) {
+                    throw new Error('User not authenticated');
+                }
+
+                // Save assessment with email
+                const response = await fetch('/api/save-assessment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: user.email,
+                        assessment: assessmentData
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageContainer.innerHTML = '<div class="message success"><i class="fas fa-check-circle"></i> Assessment complete! Redirecting...</div>';
+                    localStorage.setItem('assessment', JSON.stringify(assessmentData));
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                messageContainer.innerHTML = '<div class="message error"><i class="fas fa-exclamation-circle"></i> Error: ' + error.message + '</div>';
+                console.error('Assessment error:', error);
+            }
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

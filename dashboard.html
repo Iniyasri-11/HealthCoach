@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dashboard - WellnessFlow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, rgba(168, 232, 211, 0.15), rgba(168, 216, 232, 0.1));
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid rgba(110, 199, 165, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(110, 199, 165, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6ec7a5;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-welcome {
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .user-welcome strong {
+            color: #6ec7a5;
+        }
+
+        .btn-logout {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #6ec7a5, #a8e6d3);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(110, 199, 165, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #7f8c8d;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .tab-btn:hover {
+            color: #6ec7a5;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #6ec7a5;
+            color: #6ec7a5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.12);
+            border: 1px solid rgba(110, 199, 165, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card h2 i {
+            color: #6ec7a5;
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .assessment-item {
+            background: linear-gradient(135deg, rgba(110, 199, 165, 0.1), rgba(168, 216, 232, 0.1));
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+        }
+
+        .assessment-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .assessment-value {
+            color: #6ec7a5;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .recommendations-list {
+            list-style: none;
+        }
+
+        .recommendations-list li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(110, 199, 165, 0.05);
+            border-left: 4px solid #6ec7a5;
+            border-radius: 8px;
+            color: #2c3e50;
+        }
+
+        .recommendations-list li i {
+            color: #6ec7a5;
+            margin-right: 0.75rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #6ec7a5, #a8e6d3);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(110, 199, 165, 0.15);
+        }
+
+        .action-btn i {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .health-status {
+            background: linear-gradient(135deg, #6ec7a5, #a8e6d3);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .health-status h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .health-status p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .nav-right {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .assessment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+                border-bottom: none;
+            }
+
+            .tab-btn {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+                padding-left: 2rem;
+            }
+
+            .tab-btn.active {
+                border-bottom: none;
+                border-left-color: #6ec7a5;
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>WellnessFlow</span>
+        </div>
+        <div class="nav-right">
+            <div class="user-welcome">
+                <span>Welcome, <strong id="userName"></strong></span>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Your Health Dashboard</h1>
+            <p>Track your wellness journey and get personalized recommendations</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overview')">
+                <i class="fas fa-chart-line"></i> Overview
+            </button>
+            <button class="tab-btn" onclick="switchTab('assessment')">
+                <i class="fas fa-clipboard-list"></i> Assessment
+            </button>
+            <button class="tab-btn" onclick="switchTab('recommendations')">
+                <i class="fas fa-lightbulb"></i> Recommendations
+            </button>
+            <button class="tab-btn" onclick="switchTab('chatbot')">
+                <i class="fas fa-robot"></i> Health Coach AI
+            </button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="health-status">
+                <h3 id="healthStatus">Good Health</h3>
+                <p>Based on your assessment, you're on a good wellness path. Let's keep improving!</p>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-tachometer-alt"></i> Quick Metrics</h2>
+                <div class="assessment-grid" id="metricsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="action-btn" onclick="switchTab('chatbot')">
+                    <i class="fas fa-comments"></i>
+                    Chat with Coach
+                </button>
+                <button class="action-btn" onclick="updateAssessment()" style="background: linear-gradient(135deg, #a8d8e8, #d4eef7);">
+                    <i class="fas fa-sync-alt"></i>
+                    Update Assessment
+                </button>
+                <a href="index.html#contact" class="action-btn" style="background: linear-gradient(135deg, #f39c8f, #ffc4b3);">
+                    <i class="fas fa-calendar-alt"></i>
+                    Book Consultation
+                </a>
+            </div>
+        </div>
+
+        <!-- Assessment Tab -->
+        <div id="assessment" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-stethoscope"></i> Your Assessment Results</h2>
+                <div class="assessment-grid" id="assessmentDetails">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Tab -->
+        <div id="recommendations" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-heart"></i> Personalized Recommendations</h2>
+                <ul class="recommendations-list" id="recommendationsList">
+                    <!-- Populated by JS -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Chatbot Tab -->
+        <div id="chatbot" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-robot"></i> Health Coach AI Chat</h2>
+                <iframe src="chatbot.html" style="width: 100%; height: 600px; border: none; border-radius: 16px;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Check authentication
+        function  checkAuth() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            const userData = JSON.parse(user);
+            document.getElementById('userName').textContent = userData.username || 'User';
+        }
+
+        // Load assessment data from backend first, then fallback to localStorage
+        async function loadAssessmentData() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (!user || !user.email) {
+                    console.error('User not authenticated');
+                    return;
+                }
+
+                // Try to fetch from backend
+                const response = await fetch('/api/get-assessment/' + encodeURIComponent(user.email));
+                const result = await response.json();
+
+                if (result.success && result.assessment) {
+                    const data = result.assessment;
+                    // Update localStorage with the latest backend data
+                    localStorage.setItem('assessment', JSON.stringify(data));
+                    displayMetrics(data);
+                    displayAssessment(data);
+                    generateRecommendations(data);
+                    updateHealthStatus(data);
+                } else {
+                    // Fallback to localStorage if backend fails
+                    const assessment = localStorage.getItem('assessment');
+                    if (assessment) {
+                        const data = JSON.parse(assessment);
+                        displayMetrics(data);
+                        displayAssessment(data);
+                        generateRecommendations(data);
+                        updateHealthStatus(data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading assessment:', error);
+                // Fallback to localStorage
+                const assessment = localStorage.getItem('assessment');
+                if (assessment) {
+                    const data = JSON.parse(assessment);
+                    displayMetrics(data);
+                    displayAssessment(data);
+                    generateRecommendations(data);
+                    updateHealthStatus(data);
+                }
+            }
+        }
+
+        function displayMetrics(data) {
+            const metricsGrid = document.getElementById('metricsGrid');
+            metricsGrid.innerHTML = `
+                <div class="assessment-item">
+                    <div class="assessment-label"><i class="fas fa-smile"></i> Current Health</div>
+                    <div class="assessment-value">${data.current_health || 'N/A'}</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label"><i class="fas fa-dumbbell"></i> Lifestyle</div>
+                    <div class="assessment-value">${data.lifestyle || 'N/A'}</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label"><i class="fas fa-bed"></i> Sleep Hours</div>
+                    <div class="assessment-value">${data.sleep_hours || 'N/A'} hrs</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label"><i class="fas fa-wave-square"></i> Stress Level</div>
+                    <div class="assessment-value">${data.stress_level || 'N/A'}/10</div>
+                </div>
+            `;
+        }
+
+        function displayAssessment(data) {
+            const assessmentDiv = document.getElementById('assessmentDetails');
+            assessmentDiv.innerHTML = `
+                <div class="assessment-item">
+                    <div class="assessment-label">Health Status</div>
+                    <div class="assessment-value">${data.current_health}</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label">Activity Level</div>
+                    <div class="assessment-value">${data.lifestyle}</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label">Diet</div>
+                    <div class="assessment-value">${data.diet}</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label">Sleep (hours/night)</div>
+                    <div class="assessment-value">${data.sleep_hours} hrs</div>
+                </div>
+                <div class="assessment-item">
+                    <div class="assessment-label">Stress Level</div>
+                    <div class="assessment-value">${data.stress_level}/10</div>
+                </div>
+            `;
+
+            if (data.symptoms) {
+                assessmentDiv.innerHTML += `
+                    <div class="assessment-item" style="grid-column: 1 / -1;">
+                        <div class="assessment-label">Current Symptoms</div>
+                        <p style="margin-top: 0.5rem; color: #2c3e50;">${data.symptoms}</p>
+                    </div>
+                `;
+            }
+
+            if (data.medical_history) {
+                assessmentDiv.innerHTML += `
+                    <div class="assessment-item" style="grid-column: 1 / -1;">
+                        <div class="assessment-label">Medical History</div>
+                        <p style="margin-top: 0.5rem; color: #2c3e50;">${data.medical_history}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function generateRecommendations(data) {
+            const recommendations = [];
+
+            // Based on health status
+            if (data.current_health === 'excellent') {
+                recommendations.push('✓ Maintain your excellent health with consistent habits');
+            } else if (data.current_health === 'good') {
+                recommendations.push('✓ Continue your good health journey with minor improvements');
+            } else if (data.current_health === 'fair') {
+                recommendations.push('⚠ Consider scheduling a consultation with a healthcare professional');
+            } else {
+                recommendations.push('⚠ Prioritize seeking medical advice for your health concerns');
+            }
+
+            // Sleep recommendations
+            if (data.sleep_hours < 6) {
+                recommendations.push('💤 Aim for 7-9 hours of sleep per night');
+            } else if (data.sleep_hours >= 7 && data.sleep_hours <= 9) {
+                recommendations.push('✓ Your sleep schedule is optimal');
+            }
+
+            // Activity recommendations
+            if (data.lifestyle === 'sedentary') {
+                recommendations.push('🏃 Start with 20-30 minutes of moderate daily exercise');
+            } else if (data.lifestyle === 'moderate') {
+                recommendations.push('✓ Try increasing exercise frequency to 5 days per week');
+            }
+
+            // Stress management
+            if (data.stress_level >= 8) {
+                recommendations.push('🧘 Practice daily meditation or yoga for 10-15 minutes');
+            } else if (data.stress_level >= 5) {
+                recommendations.push('💆 Consider stress-reduction activities like walking or meditation');
+            }
+
+            // Diet recommendations
+            if (data.diet === 'poor') {
+                recommendations.push('🥗 Incorporate more vegetables, fruits, and whole grains');
+            } else if (data.diet === 'average') {
+                recommendations.push('🥕 Increase intake of nutrient-dense foods');
+            }
+
+            // Default helpful suggestions
+            recommendations.push('💧 Stay hydrated - drink at least 8 glasses of water daily');
+            recommendations.push('🎯 Set realistic health goals and track your progress');
+
+            const list = document.getElementById('recommendationsList');
+            list.innerHTML = recommendations.map(rec => `<li><i class="fas fa-check-circle"></i> ${rec}</li>`).join('');
+        }
+
+        function updateHealthStatus(data) {
+            const status = document.getElementById('healthStatus');
+            const statusMap = {
+                excellent: '🌟 Excellent Health',
+                good: '✓ Good Health',
+                fair: '⚠ Needs Improvement',
+                poor: '🔴 Needs Urgent Care'
+            };
+            status.textContent = statusMap[data.current_health] || 'Health Status';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Mark clicked button as active
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+
+        function updateAssessment() {
+            window.location.href = 'health-assessment.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('assessment');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        checkAuth();
+        loadAssessmentData();
+    </script>
+</body>
+</html>

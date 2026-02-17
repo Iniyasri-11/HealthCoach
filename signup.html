@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - WellnessFlow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="split-container">
+        <!-- Left Side: Brand & Inspiration -->
+        <div class="brand-section">
+            <div class="brand-content"
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: auto;">
+                <div class="logo">
+                    <i class="fas fa-leaf" style="font-size: 2.2rem; color: white;"></i>
+                    <span
+                        style="font-size: 1.6rem; font-weight: 700; color: white; margin-left: 12px; letter-spacing: -0.5px;">WellnessFlow</span>
+                </div>
+            </div>
+
+            <div class="brand-content">
+                <h1>Start Your<br>Transformation.</h1>
+                <p>Join thousands of members achieving their health goals. Your personalized wellness dashboard is just
+                    one step away.</p>
+                <div style="margin-top: 3rem;">
+                    <button onclick="openConsultationModal()" class="btn"
+                        style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: white; border-radius: 50px; padding: 1rem 2.5rem; font-weight: 600; backdrop-filter: blur(10px); transition: all 0.3s;">
+                        <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Book Free Consultation
+                    </button>
+                </div>
+            </div>
+
+            <div class="brand-content" style="margin-top: auto; font-size: 0.9rem; opacity: 0.6; padding-top: 2rem;">
+                &copy; 2026 WellnessFlow Inc.
+            </div>
+        </div>
+
+        <!-- Right Side: Signup Form -->
+        <div class="form-section">
+            <div class="glass-card">
+                <div class="auth-header" style="text-align: left; margin-bottom: 2rem;">
+                    <h2>Create Account</h2>
+                    <p>It's free and takes less than a minute.</p>
+                </div>
+
+                <div class="error-message" id="errorMsg"></div>
+                <div class="success-message" id="successMsg"></div>
+
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="username" style="font-weight: 500; color: #555;">Full Name</label>
+                        <input type="text" id="username" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" style="font-weight: 500; color: #555;">Email</label>
+                        <input type="email" id="email" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" style="font-weight: 500; color: #555;">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" style="font-weight: 500; color: #555;">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-signup" style="width: 100%;">
+                        Create Account <i class="fas fa-check" style="margin-left: 8px;"></i>
+                    </button>
+                </form>
+
+                <div class="auth-footer" style="border: none; padding-top: 2rem; margin-top: 0;">
+                    <p style="color: #888;">Already have an account? <a href="index.html"
+                            style="color: var(--primary-dark); font-weight: 700;">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consultation Modal -->
+    <div id="consultationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeConsultationModal()">&times;</span>
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <div
+                    style="width: 60px; height: 60px; background: rgba(110, 199, 165, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--primary-color); font-size: 1.5rem;">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: #2c3e50;">Book Consultation</h2>
+                <p style="color: #7f8c8d;">Share your details and we'll help you get started.</p>
+            </div>
+
+            <form id="consultationForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="consultName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="consultEmail" required placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Health Condition / Symptoms</label>
+                    <textarea id="healthCondition" rows="4" required
+                        placeholder="Please describe any specific health conditions, symptoms, or goals..."
+                        style="width: 100%; padding: 1rem; border: 2px solid #eee; border-radius: 12px; font-family: inherit; font-size: 1rem; resize: vertical; transition: border-color 0.3s;"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Date</label>
+                    <input type="date" id="consultDate" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large"
+                    style="width: 100%; margin-top: 1rem; padding: 1.2rem;">
+                    Confirm Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Signup Logic
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validation
+            if (password !== confirmPassword) {
+                errorMsg.textContent = '✗ Passwords do not match';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMsg.textContent = '✗ Password must be at least 6 characters';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    successMsg.textContent = '✓ Account created! Redirecting to login...';
+                    successMsg.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html'; // Redirect to index (which is now login)
+                    }, 2000);
+                } else {
+                    errorMsg.textContent = '✗ ' + (data.error || 'Sign up failed');
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                errorMsg.textContent = '✗ Connection error. Please try again.';
+                errorMsg.style.display = 'block';
+                console.error('Signup error:', error);
+            }
+        });
+
+        // Consultation Modal Logic
+        const modal = document.getElementById('consultationModal');
+
+        function openConsultationModal() {
+            modal.style.display = 'block';
+        }
+
+        function closeConsultationModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                closeConsultationModal();
+            }
+        }
+
+        document.getElementById('consultationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Request Sent';
+                btn.style.background = '#6ec7a5';
+
+                setTimeout(() => {
+                    alert('Thank you! Your health consultation request has been received. A coach will review your condition and contact you shortly.');
+                    closeConsultationModal();
+                    e.target.reset();
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 1000);
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

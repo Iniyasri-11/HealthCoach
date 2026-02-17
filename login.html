@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WellnessFlow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, rgba(168, 232, 211, 0.3), rgba(168, 216, 232, 0.2));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .home-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(110, 199, 165, 0.1), rgba(168, 216, 232, 0.1));
+            text-align: center;
+        }
+
+        .home-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .home-text h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .home-text p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .features-list li {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(110, 199, 165, 0.08);
+            border: 1px solid rgba(110, 199, 165, 0.1);
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .features-list i {
+            color: #6ec7a5;
+            margin-right: 0.75rem;
+        }
+
+        .auth-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.12);
+            border: 1px solid rgba(110, 199, 165, 0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-auth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-auth i {
+            font-size: 2rem;
+            color: #6ec7a5;
+        }
+
+        .logo-auth span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6ec7a5;
+        }
+
+        .auth-header h2 {
+            font-size: 1.75rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(110, 199, 165, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f8fafb;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #6ec7a5;
+            box-shadow: 0 0 0 3px rgba(110, 199, 165, 0.1);
+            background: white;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #6ec7a5, #a8e6d3);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(110, 199, 165, 0.2);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(110, 199, 165, 0.1);
+        }
+
+        .auth-footer p {
+            color: #7f8c8d;
+            margin-bottom: 0.75rem;
+        }
+
+        .auth-footer a {
+            color: #6ec7a5;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .auth-footer a:hover {
+            color: #4db896;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            border-left: 4px solid #3c3;
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .auth-content h1 {
+                font-size: 2rem;
+            }
+
+            .auth-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Section -->
+    <div class="home-section">
+        <div class="home-content">
+            <div class="home-text">
+                <h1>Your Personal Health Coach Awaits</h1>
+                <p>Transform your health with personalized guidance, expert wellness coaching, and compassionate support</p>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> Personalized Health Assessment</li>
+                    <li><i class="fas fa-check-circle"></i> AI-Powered Health Coaching</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time Health Analytics</li>
+                    <li><i class="fas fa-check-circle"></i> Expert Recommendations</li>
+                    <li><i class="fas fa-check-circle"></i> Mental Wellness Support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo-auth">
+                    <i class="fas fa-leaf"></i>
+                    <span>WellnessFlow</span>
+                </div>
+                <h2>Welcome Back</h2>
+                <p>Sign in to your account</p>
+            </div>
+
+            <div class="error-message" id="errorMsg"></div>
+            <div class="success-message" id="successMsg"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Create one now</a></p>
+                <p><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('user', JSON.stringify({
+                        email: email,
+                        username: data.username,
+                        loggedIn: true
+                    }));
+
+                    successMsg.textContent = '✓ Login successful! Redirecting...';
+                    successMsg.style.display = 'block';
+
+                    // Redirect directly to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    errorMsg.textContent = '✗ ' + (data.error || 'Login failed');
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                errorMsg.textContent = '✗ Connection error. Please try again.';
+                errorMsg.style.display = 'block';
+                console.error('Login error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
